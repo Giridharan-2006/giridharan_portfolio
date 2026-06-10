@@ -1,5 +1,6 @@
 const express = require("express");
 const Project = require("../models/Project");
+const connectDB = require("../utils/connectDB");
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ function checkPassword(req, res, next) {
 
 router.get("/", async (req, res) => {
   try {
+    await connectDB();
     const projects = await Project.find().sort({ createdAt: -1 });
     res.json(projects);
   } catch (error) {
@@ -25,6 +27,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", checkPassword, async (req, res) => {
   try {
+    await connectDB();
     const { title, description, technologies, link } = req.body;
 
     const project = await Project.create({
@@ -47,6 +50,7 @@ router.post("/", checkPassword, async (req, res) => {
 
 router.delete("/:id", checkPassword, async (req, res) => {
   try {
+    await connectDB();
     const project = await Project.findByIdAndDelete(req.params.id);
 
     if (!project) {

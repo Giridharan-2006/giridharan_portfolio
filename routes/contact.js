@@ -1,10 +1,12 @@
 const express = require("express");
 const ContactInfo = require("../models/ContactInfo");
+const connectDB = require("../utils/connectDB");
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
+    await connectDB();
     let contact = await ContactInfo.findOne();
 
     if (!contact) {
